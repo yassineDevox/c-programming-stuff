@@ -71,7 +71,7 @@ void afficherMatriceRoutes()
 				numberOfEdgesNotNull++; 
 			}
         }
-        printf("\t\t------------\n\n");
+        printf("\t\t-------------\n\n");
     }
 }
 
