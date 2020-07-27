@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <clocale>
 #define INFINITY 9999
 #define MAX 10
 
@@ -15,8 +16,170 @@ int numberOfEdgesNotNull = 0;
 
 char vertex[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
 
+
+
+
+
+
+
+
 //-----------------------functions------------
 
+//tools
+void vertexAndMat();
+
+// extension
+int menu();
+
+void initialValues();
+
+void afficherMatriceRoutes();
+
+void saisirGraphe();
+
+void saisirConstraintsForNodes();
+
+void afficherContraintsForNodes();
+
+void saisirConstraintForEdges();
+
+void afficherContraintsForEdges();
+
+void saisirDurrationsForHeureDePointConstraints();
+
+void afficherLesDurresHeurePoints();
+
+void preTraitement();
+
+int main()
+{
+    setlocale(LC_ALL,"HUN");
+
+    menu:
+        system("cls");
+        //menu function
+	
+    int choice = menu();
+
+    switch (choice)
+    {
+    case 0:
+    {
+        initialValues();
+        afficherMatriceRoutes();
+
+        goto continuer;
+    }
+    break;
+    case 1:
+    {
+        saisirGraphe();
+        afficherMatriceRoutes();
+
+        goto continuer;
+    }
+    break;
+    case 2:
+    {
+        saisirConstraintsForNodes();
+        afficherContraintsForNodes();
+
+        goto continuer;
+    }
+    break;
+    case 3:
+    {
+        saisirConstraintForEdges();
+        afficherContraintsForEdges();   
+        goto continuer;
+    }
+    break;
+    case 4:
+    {
+        saisirDurrationsForHeureDePointConstraints();
+        afficherLesDurresHeurePoints();
+        goto continuer;
+    }
+    break;
+    case 5:
+    {
+        afficherMatriceRoutes();
+        goto continuer;
+    }
+    break;
+    case 6:
+    {
+        afficherContraintsForNodes();
+        goto continuer;
+    }
+    break;
+    case 7:
+    {
+        afficherContraintsForEdges();   
+        goto continuer;
+    }
+    break;
+    case 8:
+    {
+        afficherLesDurresHeurePoints();
+        goto continuer;
+    }
+    break;
+    case 9:
+    {
+        preTraitement();
+        goto continuer;
+    }
+    break;
+    default:
+        
+        goto fin;
+        break;
+    }
+
+    continuer:
+    int choix;
+    printf("\n\nVous les vous continuer\nOui : 1\nNon:0\n\tVotre Choix : ");
+    scanf("%d", &choix);
+
+    if (choix == 1)
+    {
+        goto menu;
+    }
+    else
+    {
+        goto fin;
+    }
+
+  
+    fin:
+    system("cls");
+    printf("\nVous avez quitter le programme !!");
+
+
+}
+
+
+//-----------------------functions------------
+
+//tools
+void vertexAndMat(){
+
+    for (int i = 0; i < numberOfNodes; i++)
+    {
+        printf("%d  ",i);
+        
+    }
+    printf("\n");
+
+    for (int i = 0; i < numberOfNodes; i++)
+    {
+        printf("%c  ",vertex[i]);
+        
+    }
+    printf("\n\n\n");
+
+}
 // extension
 int menu()
 {
@@ -26,12 +189,11 @@ int menu()
 
         printf(" \nTrouver le petit chemin possible pour votre route \1 !!");
         printf(" \nMenu du Programme : !!");
-
         printf(" \n0 : Utiliser les valeurs initial ? ");
         printf(" \n1 : Remplire la matrice des routes");
         printf(" \n2 : Indiquer des rempoints non fonctionnel");
         printf(" \n3 : Indiquer des routes non fonctionnel");
-        printf(" \n4 : Remplir les durr�es d'attents en cas d'heure de point ");
+        printf(" \n4 : Remplir les durrées d'attents en cas d'heure de point ");
         printf(" \n5 : Afficher la matrice des routes ");
         printf(" \n6 : Afficher les rempoints non-fonctionnel");
         printf(" \n7 : Afficher les routes non-fonctionnel");
@@ -119,8 +281,15 @@ void saisirConstraintsForNodes()
     // create a dynamic array to store the indexs of damaged nodes
 
     damagedNodes = (int *)malloc(sizeof(int) * numberOfNodesDamaged);
-
-    for (int i = 0; i < numberOfNodesDamaged; i++)
+    
+    printf("\n-------------- Remarques :\n");
+	vertexAndMat();
+	
+	if(numberOfEdgesDamaged!=0)
+	afficherContraintsForEdges();
+    
+    
+	for (int i = 0; i < numberOfNodesDamaged; i++)
     {
         do
         {
@@ -147,6 +316,7 @@ void afficherContraintsForNodes()
 void saisirConstraintForEdges()
 {
 
+
     //delete all previous values of edges-constraints
     numberOfEdgesDamaged = 0;
     free(damagedNodes);
@@ -155,7 +325,7 @@ void saisirConstraintForEdges()
     //enter the number of nodes non fonctionnel
     do
     {
-        printf("\nHow much Edges are damaged ? ( < %d) : ", numberOfEdgesNotNull);
+        printf("\nHow much Edges are damaged ? ( < %d) : ", numberOfEdgesNotNull+1);
         scanf("%d", &numberOfEdgesDamaged);
 
     } while (numberOfEdgesDamaged > numberOfEdgesNotNull);
@@ -167,7 +337,14 @@ void saisirConstraintForEdges()
     for (int i = 0; i < numberOfEdgesDamaged; i++)
         damagedEdges[i] = (int *)malloc(2 * sizeof(int));
 
-    for (int i = 0; i < numberOfEdgesDamaged; i++)
+	printf("\n-------------- Remarques :\n");
+	vertexAndMat();
+	
+    if(numberOfNodesDamaged!=0)
+    afficherContraintsForNodes();
+	int c1,c2;
+	
+	for (int i = 0; i < numberOfEdgesDamaged; i++)
     {
 		int from = 0, to = 0;
         //Enter i to j values
@@ -179,7 +356,17 @@ void saisirConstraintForEdges()
             printf("\tTo ( < %d) : ", numberOfNodes);
             scanf("%d", &to);
 
-        } while (from >= numberOfNodes || to >= numberOfNodes);
+			 c1 = from >= numberOfNodes || to >= numberOfNodes;
+			 c2 = GRAPH_MAT[from][to]==0;
+			
+			if(c1){
+				printf("\nInvalid offsets try again ");
+			}
+			if(c2)
+			{
+				printf("\nNo conection between nodes");
+			}
+        } while (c1 || c2);
 
         //store constraints values
         damagedEdges[i][0] = from;
@@ -199,8 +386,6 @@ void afficherContraintsForEdges()
         printf("\n[ %c ]-->[ %c ] ",vertex[from],vertex[to]);
     }
 }
-
-
 
 
 void saisirDurrationsForHeureDePointConstraints()
@@ -242,111 +427,11 @@ void afficherLesDurresHeurePoints()
     }
 }
 
+void preTraitement(){
 
-int main()
-{
-
-    menu:
-	
-        system("cls");
-        //menu function
-	
-    int choice = menu();
-
-    switch (choice)
-    {
-    case 0:
-    {
-        initialValues();
-        afficherMatriceRoutes();
-
-        goto continuer;
-    }
-    break;
-    case 1:
-    {
-        saisirGraphe();
-        afficherMatriceRoutes();
-
-        goto continuer;
-    }
-    break;
-    case 2:
-    {
-        saisirConstraintsForNodes();
-        afficherContraintsForNodes();
-
-        goto continuer;
-    }
-    break;
-    case 3:
-    {
-        saisirConstraintForEdges();
-        afficherContraintsForEdges();   
-        goto continuer;
-    }
-    break;
-    case 4:
-    {
-        saisirDurrationsForHeureDePointConstraints();
-        afficherLesDurresHeurePoints();
-        goto continuer;
-    }
-    break;
-    case 5:
-    {
-        
-        goto continuer;
-    }
-    break;
-    case 6:
-    {
-        afficherContraintsForNodes();
-        goto continuer;
-    }
-    break;
-    case 7:
-    {
-        afficherContraintsForEdges();   
-        goto continuer;
-    }
-    break;
-    case 8:
-    {
-        afficherLesDurresHeurePoints();
-        goto continuer;
-    }
-    break;
-    case 9:
-    {
-        
-        goto continuer;
-    }
-    break;
-    default:
-        
-        goto fin;
-        break;
-    }
-
-    continuer:
-    int choix;
-    printf("\n\nVous les vous continuer\nOui : 1\nNon:0\n\tVotre Choix : ");
-    scanf("%d", &choix);
-
-    if (choix == 1)
-    {
-        goto menu;
-    }
-    else
-    {
-        goto fin;
-    }
-
-  
-        fin:
-        system("cls");
-        printf("\nVous avez quitter le programme !!");
-
-
+    afficherMatriceRoutes();
+    afficherContraintsForNodes();
+    afficherContraintsForEdges();
+    afficherLesDurresHeurePoints();
 }
+
