@@ -16,13 +16,6 @@ int numberOfEdgesNotNull = 0;
 
 char vertex[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
 
-
-
-
-
-
-
-
 //-----------------------functions------------
 
 //tools
@@ -53,12 +46,12 @@ void preTraitement();
 
 int main()
 {
-    setlocale(LC_ALL,"HUN");
+    setlocale(LC_ALL, "HUN");
 
-    menu:
-        system("cls");
-        //menu function
-	
+menu:
+    system("cls");
+    //menu function
+
     int choice = menu();
 
     switch (choice)
@@ -82,7 +75,7 @@ int main()
     case 2:
     {
         saisirConstraintsForNodes();
-        afficherContraintsForNodes();
+        // afficherContraintsForNodes();
 
         goto continuer;
     }
@@ -90,7 +83,7 @@ int main()
     case 3:
     {
         saisirConstraintForEdges();
-        afficherContraintsForEdges();   
+        afficherContraintsForEdges();
         goto continuer;
     }
     break;
@@ -115,7 +108,7 @@ int main()
     break;
     case 7:
     {
-        afficherContraintsForEdges();   
+        afficherContraintsForEdges();
         goto continuer;
     }
     break;
@@ -132,12 +125,12 @@ int main()
     }
     break;
     default:
-        
+
         goto fin;
         break;
     }
 
-    continuer:
+continuer:
     int choix;
     printf("\n\nVous les vous continuer\nOui : 1\nNon:0\n\tVotre Choix : ");
     scanf("%d", &choix);
@@ -151,34 +144,28 @@ int main()
         goto fin;
     }
 
-  
-    fin:
+fin:
     system("cls");
     printf("\nVous avez quitter le programme !!");
-
-
 }
-
 
 //-----------------------functions------------
 
 //tools
-void vertexAndMat(){
+void vertexAndMat()
+{
 
     for (int i = 0; i < numberOfNodes; i++)
     {
-        printf("%d  ",i);
-        
+        printf("%d  ", i);
     }
     printf("\n");
 
     for (int i = 0; i < numberOfNodes; i++)
     {
-        printf("%c  ",vertex[i]);
-        
+        printf("%c  ", vertex[i]);
     }
     printf("\n\n\n");
-
 }
 // extension
 int menu()
@@ -186,7 +173,6 @@ int menu()
     int choix;
     do
     {
-
         printf(" \nTrouver le petit chemin possible pour votre route \1 !!");
         printf(" \nMenu du Programme : !!");
         printf(" \n0 : Utiliser les valeurs initial ? ");
@@ -197,11 +183,10 @@ int menu()
         printf(" \n5 : Afficher la matrice des routes ");
         printf(" \n6 : Afficher les rempoints non-fonctionnel");
         printf(" \n7 : Afficher les routes non-fonctionnel");
-        printf(" \n8 : Afficher les durees d'heures de points ");
+        printf(" \n8 : Afficher les durees d'heures de points");
         printf(" \n9 : Afficher le chemin le plus court");
         printf(" \n10 : Quitter le programme\n\t\tVotre choix : ");
         scanf("%d", &choix);
-        system("cls");
     } while (choix < 0 || choix > 10);
 
     return choix;
@@ -224,14 +209,15 @@ void initialValues()
 void afficherMatriceRoutes()
 {
     printf("\nMatrice de routes : \n\n\n");
-    for (int i = 0; i < numberOfNodes-2; i++)
+    for (int i = 0; i < numberOfNodes - 2; i++)
     {
-        for (int j = i+1; j < numberOfNodes; j++)
+        for (int j = i + 1; j < numberOfNodes; j++)
         {
-            if (GRAPH_MAT[i][j] != 0){
-        		printf("\t+ ( %c )--[ %3d ] <--> ( %c )\n", vertex[i], GRAPH_MAT[i][j], vertex[j]);
-				numberOfEdgesNotNull++; 
-			}
+            if (GRAPH_MAT[i][j] != 0)
+            {
+                printf("\t+ ( %c )--[ %3d ] <--> ( %c )\n", vertex[i], GRAPH_MAT[i][j], vertex[j]);
+                numberOfEdgesNotNull++;
+            }
         }
         printf("\t\t-------------\n\n");
     }
@@ -250,7 +236,7 @@ void saisirGraphe()
     //full the matrix by the values of edges for each node
     for (int i = 0; i < numberOfNodes; i++)
     {
-        for (int j = i+1; j < numberOfNodes; j++)
+        for (int j = i + 1; j < numberOfNodes; j++)
         {
             do
             {
@@ -258,7 +244,7 @@ void saisirGraphe()
                 scanf("%d", &GRAPH_MAT[i][j]);
 
             } while (GRAPH_MAT[i][j] < 0);
-            GRAPH_MAT[i][j]=GRAPH_MAT[i][j];
+            GRAPH_MAT[i][j] = GRAPH_MAT[i][j];
         }
     }
 }
@@ -273,7 +259,7 @@ void saisirConstraintsForNodes()
     //enter the number of nodes non fonctionnel
     do
     {
-        printf("\nEntrer le nombre des noeuds non fonctionnel  ( < %d) : ",numberOfNodes);
+        printf("\nEntrer le nombre des noeuds non fonctionnel  ( < %d) : ", numberOfNodes);
         scanf("%d", &numberOfNodesDamaged);
 
     } while (numberOfNodesDamaged > numberOfNodes);
@@ -281,15 +267,14 @@ void saisirConstraintsForNodes()
     // create a dynamic array to store the indexs of damaged nodes
 
     damagedNodes = (int *)malloc(sizeof(int) * numberOfNodesDamaged);
-    
+
     printf("\n-------------- Remarques :\n");
-	vertexAndMat();
-	
-	if(numberOfEdgesDamaged!=0)
-	afficherContraintsForEdges();
-    
-    
-	for (int i = 0; i < numberOfNodesDamaged; i++)
+    vertexAndMat();
+
+    if (numberOfEdgesDamaged != 0)
+        afficherContraintsForEdges();
+
+    for (int i = 0; i < numberOfNodesDamaged; i++)
     {
         do
         {
@@ -306,26 +291,24 @@ void afficherContraintsForNodes()
 
     for (int i = 0; i < numberOfNodesDamaged - 1; i++)
     {
-    	int ii=damagedNodes[i];
+        int ii = damagedNodes[i];
         printf("(%c) , ", vertex[ii]);
     }
-    int ii=damagedNodes[numberOfNodesDamaged - 1];
+    int ii = damagedNodes[numberOfNodesDamaged - 1];
     printf("(%c)", vertex[ii]);
 }
 
 void saisirConstraintForEdges()
 {
 
-
     //delete all previous values of edges-constraints
     numberOfEdgesDamaged = 0;
     free(damagedNodes);
 
-
     //enter the number of nodes non fonctionnel
     do
     {
-        printf("\nHow much Edges are damaged ? ( < %d) : ", numberOfEdgesNotNull+1);
+        printf("\nHow much Edges are damaged ? ( < %d) : ", numberOfEdgesNotNull + 1);
         scanf("%d", &numberOfEdgesDamaged);
 
     } while (numberOfEdgesDamaged > numberOfEdgesNotNull);
@@ -337,35 +320,36 @@ void saisirConstraintForEdges()
     for (int i = 0; i < numberOfEdgesDamaged; i++)
         damagedEdges[i] = (int *)malloc(2 * sizeof(int));
 
-	printf("\n-------------- Remarques :\n");
-	vertexAndMat();
-	
-    if(numberOfNodesDamaged!=0)
-    afficherContraintsForNodes();
-	int c1,c2;
-	
-	for (int i = 0; i < numberOfEdgesDamaged; i++)
+    printf("\n-------------- Remarques :\n");
+    vertexAndMat();
+
+    if (numberOfNodesDamaged != 0)
+        afficherContraintsForNodes();
+    int c1, c2;
+
+    for (int i = 0; i < numberOfEdgesDamaged; i++)
     {
-		int from = 0, to = 0;
+        int from = 0, to = 0;
         //Enter i to j values
         do
         {
-            
+
             printf("\nFrom ( < %d) : ", numberOfNodes);
             scanf("%d", &from);
             printf("\tTo ( < %d) : ", numberOfNodes);
             scanf("%d", &to);
 
-			 c1 = from >= numberOfNodes || to >= numberOfNodes;
-			 c2 = GRAPH_MAT[from][to]==0;
-			
-			if(c1){
-				printf("\nInvalid offsets try again ");
-			}
-			if(c2)
-			{
-				printf("\nNo conection between nodes");
-			}
+            c1 = from >= numberOfNodes || to >= numberOfNodes;
+            c2 = GRAPH_MAT[from][to] == 0;
+
+            if (c1)
+            {
+                printf("\nInvalid offsets try again ");
+            }
+            if (c2)
+            {
+                printf("\nNo conection between nodes");
+            }
         } while (c1 || c2);
 
         //store constraints values
@@ -377,33 +361,32 @@ void saisirConstraintForEdges()
 void afficherContraintsForEdges()
 {
 
-    printf("\nLes renpoints non-fonctionnel :\n ");
+    printf("\nLes routes non-fonctionnel :\n ");
 
     for (int i = 0; i < numberOfEdgesDamaged; i++)
     {
         int from = damagedEdges[i][0];
         int to = damagedEdges[i][1];
-        printf("\n[ %c ]-->[ %c ] ",vertex[from],vertex[to]);
+        printf("\n[ %c ]-->[ %c ] ", vertex[from], vertex[to]);
     }
 }
 
-
 void saisirDurrationsForHeureDePointConstraints()
-{   
-    durrationsForHeuresDepoints = (int *) malloc(sizeof(int) * numberOfEdgesNotNull);
+{
+    durrationsForHeuresDepoints = (int *)malloc(sizeof(int) * numberOfEdgesNotNull);
 
     printf("\nSaisir les durrés a ajouter dans le cas d'heure de points :\n");
-    for (int i = 0, k = 0; i < numberOfNodes-2; i++)
+    for (int i = 0, k = 0; i < numberOfNodes - 2; i++)
     {
-        for (int j = i+1; j < numberOfNodes; j++)
+        for (int j = i + 1; j < numberOfNodes; j++)
         {
-            if(GRAPH_MAT[i][j]!=0){
-                
+            if (GRAPH_MAT[i][j] != 0)
+            {
+
                 printf("\n Node( %c ) <--> node( %c ) : ", vertex[i], vertex[j]);
                 scanf("%d", &durrationsForHeuresDepoints[k]);
                 k++;
             }
-            
         }
     }
 }
@@ -412,26 +395,153 @@ void afficherLesDurresHeurePoints()
 {
 
     printf("\nLes durres d'heures de points : \n");
-    
-    for (int i = 0, k = 0; i < numberOfNodes-2; i++)
+
+    for (int i = 0, k = 0; i < numberOfNodes - 2; i++)
     {
-        for (int j = i+1; j < numberOfNodes; j++)
+        for (int j = i + 1; j < numberOfNodes; j++)
         {
-            if(GRAPH_MAT[i][j]!=0){
-                
-                printf("\n Node( %c ) <--> node( %c ) : %d mins", vertex[i], vertex[j],durrationsForHeuresDepoints[k]);
+            if (GRAPH_MAT[i][j] != 0)
+            {
+                printf("\n Node( %c ) <--> node( %c ) : %d mins", vertex[i], vertex[j], durrationsForHeuresDepoints[k]);
                 k++;
             }
-            
         }
     }
 }
 
-void preTraitement(){
+void dijkstra(int G[MAX][MAX], int n, int u, int v)
+{
 
-    afficherMatriceRoutes();
-    afficherContraintsForNodes();
-    afficherContraintsForEdges();
-    afficherLesDurresHeurePoints();
+    int cost[MAX][MAX], distance[MAX], pred[MAX];
+    int visited[MAX], mindistance, nextnode, i, j;
+    char vertex[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
+    int startnode = u;
+    int endnode = v;
+    int count = 1, k = 0, N, M, L;
+    char *p = (char *)malloc(sizeof(char) + 1);
+
+    //pred[] stores the predecessor of each node
+    //count gives the number of nodes seen so far
+    //create the cost matrix
+    for (i = 0; i < n; i++)
+        for (j = 0; j < n; j++)
+            if (G[i][j] == 0)
+                cost[i][j] = INFINITY;
+            else
+                cost[i][j] = G[i][j];
+
+    //initialize pred[],distance[] and visited[]
+    for (i = 0; i < n; i++)
+    {
+        distance[i] = cost[startnode][i];
+        pred[i] = startnode;
+        visited[i] = 0;
+    }
+
+    distance[startnode] = 0;
+    visited[startnode] = 1;
+
+    count = 1;
+
+    while (count < n - 1)
+    {
+        mindistance = INFINITY;
+
+        //nextnode gives the node at minimum distance
+        for (i = 0; i < n; i++)
+            if (distance[i] < mindistance && !visited[i])
+            {
+                mindistance = distance[i];
+                nextnode = i;
+            }
+
+        //check if a better path exists through nextnode
+        visited[nextnode] = 1;
+        for (i = 0; i < n; i++)
+            if (!visited[i])
+                if (mindistance + cost[nextnode][i] < distance[i])
+                {
+                    distance[i] = mindistance + cost[nextnode][i];
+                    pred[i] = nextnode;
+                }
+        count++;
+    }
+
+    //print the path and distance of each node
+    //for(i=0;i<n;i++)
+
+    //print the path and distance of J node
+    i = v;
+
+    if (i != startnode)
+    {
+        printf("\nDistance to vertex  %c =  %d", vertex[i], distance[i]);
+        //printf("\nPath= %c",vertex[i]);
+
+        j = i;
+
+        do
+        {
+            j = pred[j];
+            //printf("<-%c",vertex[j]);
+            *(p + k) = vertex[j];
+            k++;
+        } while (j != startnode);
+    }
+
+    printf("\nShortest path: ");
+
+    N = k - 1;
+    while (N + 1)
+    {
+        printf("%c -> ", *(p + N));
+        N--;
+    }
+    printf("%c\n", vertex[i]);
+
+    free(p);
 }
+
+void displayMat(){
+	 for (int i = 0; i < numberOfNodes; i++)
+        {
+
+            for (int j = 0; j < numberOfNodes; j++)
+            {
+				
+				if(GRAPH_MAT[i][j]==0)
+				printf(" - ");
+				else	
+                printf(" %3d ", GRAPH_MAT[i][j]);
+			}
+            printf("\n");
+        }
+}
+
+void preTraitement()
+{
+    //------------------applay changes to the graph
+
+        printf("\n\n________________________BEFORE_____________________\nn");
+        displayMat();
+            
+	        for (int i = 0; i < numberOfNodesDamaged; i++)
+	        {
+	            int node_index = damagedNodes[i];
+	        	printf(" %d ",node_index);
+			    for(int j=0;j<numberOfNodes;j++)
+	            GRAPH_MAT[node_index][j]=0;
+	        }
+		
+		 	for (int i = 0; i < numberOfEdgesDamaged; i++)
+	        {
+	            int from = damagedEdges[i][0];
+	            int to = damagedEdges[i][1];
+	            GRAPH_MAT[from][to]=GRAPH_MAT[to][from]=-1;
+	        }
+        
+        printf("\n\n________________________AFTER_____________________\n\n");
+        displayMat();
+       
+    }
 
