@@ -273,7 +273,7 @@ void saisirConstraintsForNodes()
     //enter the number of nodes non fonctionnel
     do
     {
-        printf("\nEntrer le nombre des noeuds non fonctionnel  ( < %d) : ", numberOfNodes);
+        printf("\nEntrer le nombre des noeuds non fonctionnel  ( < %d) : ",numberOfNodes);
         scanf("%d", &numberOfNodesDamaged);
 
     } while (numberOfNodesDamaged > numberOfNodes);
