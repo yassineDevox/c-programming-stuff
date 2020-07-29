@@ -197,7 +197,9 @@ void initialValues()
                 numberOfEdgesExistant++;
             }
         }
+    
         numberOfEdgesExistant/=2;    
+    
     fclose(fp);
 }
 
@@ -390,6 +392,8 @@ void setAddedDurationInCaseOfPeakH()
             }
         }
     }
+    displayAddedDurationInCaseOfPeakH();
+
 }
 
 void displayAddedDurationInCaseOfPeakH()
@@ -510,11 +514,7 @@ void displayMat()
 
         for (int j = 0; j < numberOfNodes; j++)
         {
-
-            if (GRAPH_MAT[i][j] == 0)
-                printf(" - ");
-            else
-                printf(" %3d ", GRAPH_MAT[i][j]);
+            printf(" %3d ", GRAPH_MAT[i][j]);
         }
         printf("\n");
     }
@@ -522,10 +522,7 @@ void displayMat()
 
 void preTraitement()
 {
-    //------------------applay changes to the graph
-
-    printf("\n\n________________________BEFORE_____________________\n\n");
-    displayMat();
+    //------------------apply changes to the graph
 
     for (int i = 0; i < numberOfNodesDamaged; i++)
     {
@@ -554,14 +551,21 @@ void preTraitement()
                 if (GRAPH_MAT[i][j] != 0)
                 {
                     GRAPH_MAT[i][j] += addedDurationsInCaseOfPeakH[k];
+                    GRAPH_MAT[j][i] += addedDurationsInCaseOfPeakH[k];
                     k++;
                 }
             }
         }
     }
 
-    printf("\n\n________________________AFTER_____________________\n\n");
+    //mode graphe
+    displayMatrixOfRoutes();
+    //mode matrice
     displayMat();
+
+    printf("\n\n------------RAPPEL------------\n\n");
+    vertexAndMat();
+
     int u, v;
     printf("\n Entrer le point de depart : ");
     scanf("%d", &u);
