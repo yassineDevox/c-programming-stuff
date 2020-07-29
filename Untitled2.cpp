@@ -26,17 +26,17 @@ int menu();
 
 void initialValues();
 
-void afficherMatriceRoutes();
+void displayMatrixOfRoutes();
 
-void saisirGraphe();
+void setGraphOfRoutes();
 
-void saisirConstraintsForNodes();
+void setConstraintsForNodes();
 
-void afficherContraintsForNodes();
+void displayConstraintsForNodes();
 
-void saisirConstraintForEdges();
+void setConstraintsForEdges();
 
-void afficherContraintsForEdges();
+void displayConstraintsForEdges();
 
 void saisirDurrationsForHeureDePointConstraints();
 
@@ -46,7 +46,7 @@ void preTraitement();
 
 int main()
 {
-    setlocale(LC_ALL, "HUN");
+//    setlocale(LC_ALL, "HUN");
 
 menu:
     system("cls");
@@ -59,31 +59,30 @@ menu:
     case 0:
     {
         initialValues();
-        afficherMatriceRoutes();
-
+		// displayMatrixOfRoutes();
         goto continuer;
     }
     break;
     case 1:
     {
-        saisirGraphe();
-        afficherMatriceRoutes();
+        setGraphOfRoutes();
+        displayMatrixOfRoutes();
 
         goto continuer;
     }
     break;
     case 2:
     {
-        saisirConstraintsForNodes();
-        // afficherContraintsForNodes();
+        setConstraintsForNodes();
+        //displayConstraintsForNodes();
 
         goto continuer;
     }
     break;
     case 3:
     {
-        saisirConstraintForEdges();
-        afficherContraintsForEdges();
+        setConstraintsForEdges();
+        displayConstraintsForEdges();
         goto continuer;
     }
     break;
@@ -96,19 +95,19 @@ menu:
     break;
     case 5:
     {
-        afficherMatriceRoutes();
+        displayMatrixOfRoutes();
         goto continuer;
     }
     break;
     case 6:
     {
-        afficherContraintsForNodes();
+        displayConstraintsForNodes();
         goto continuer;
     }
     break;
     case 7:
     {
-        afficherContraintsForEdges();
+        displayConstraintsForEdges();
         goto continuer;
     }
     break;
@@ -132,7 +131,7 @@ menu:
 
 continuer:
     int choix;
-    printf("\n\nVous les vous continuer\nOui : 1\nNon:0\n\tVotre Choix : ");
+    printf("\n\nVoulez vous continuer\nOui : 1\nNon : 0\n\tVotre Choix : ");
     scanf("%d", &choix);
 
     if (choix == 1)
@@ -176,14 +175,14 @@ int menu()
         printf(" \nTrouver le petit chemin possible pour votre route \1 !!");
         printf(" \nMenu du Programme : !!");
         printf(" \n0 : Utiliser les valeurs initial ? ");
-        printf(" \n1 : Remplire la matrice des routes");
-        printf(" \n2 : Indiquer des rempoints non fonctionnel");
-        printf(" \n3 : Indiquer des routes non fonctionnel");
-        printf(" \n4 : Remplir les durrées d'attents en cas d'heure de point ");
-        printf(" \n5 : Afficher la matrice des routes ");
-        printf(" \n6 : Afficher les rempoints non-fonctionnel");
-        printf(" \n7 : Afficher les routes non-fonctionnel");
-        printf(" \n8 : Afficher les durees d'heures de points");
+        printf(" \n1 : Remplire la matrice des boulevards");
+        printf(" \n2 : Indiquer des ronds-points non fonctionnels");
+        printf(" \n3 : Indiquer des boulevards non fonctionnels");
+        printf(" \n4 : Remplir les durrees d'attentes en cas d'heure de pointe");
+        printf(" \n5 : Afficher la matrice des boulevards ");
+        printf(" \n6 : Afficher les ronds-points non fonctionnels");
+        printf(" \n7 : Afficher les boulevards non-fonctionnel");
+        printf(" \n8 : Afficher les durees d'heures de pointes");
         printf(" \n9 : Afficher le chemin le plus court");
         printf(" \n10 : Quitter le programme\n\t\tVotre choix : ");
         scanf("%d", &choix);
@@ -206,16 +205,16 @@ void initialValues()
     fclose(fp);
 }
 
-void afficherMatriceRoutes()
+void displayMatrixOfRoutes()
 {
-    printf("\nMatrice de routes : \n\n\n");
-    for (int i = 0; i < numberOfNodes - 2; i++)
+    printf("\nGraphe des boulevards : \n\n\n");
+    for (int i = 0; i < numberOfNodes - 1; i++)
     {
         for (int j = i + 1; j < numberOfNodes; j++)
         {
             if (GRAPH_MAT[i][j] != 0)
             {
-                printf("\t+ ( %c )--[ %3d ] <--> ( %c )\n", vertex[i], GRAPH_MAT[i][j], vertex[j]);
+                printf("\t+ ( %c )<--[ %3d ]--> ( %c )\n", vertex[i], GRAPH_MAT[i][j], vertex[j]);
                 numberOfEdgesNotNull++;
             }
         }
@@ -223,7 +222,7 @@ void afficherMatriceRoutes()
     }
 }
 
-void saisirGraphe()
+void setGraphOfRoutes()
 {
     //enter values of the matrix by the user
 
@@ -234,7 +233,7 @@ void saisirGraphe()
     } while (numberOfNodes <= 0);
 
     //full the matrix by the values of edges for each node
-    for (int i = 0; i < numberOfNodes; i++)
+    for (int i = 0; i < numberOfNodes-1; i++)
     {
         for (int j = i + 1; j < numberOfNodes; j++)
         {
@@ -244,12 +243,13 @@ void saisirGraphe()
                 scanf("%d", &GRAPH_MAT[i][j]);
 
             } while (GRAPH_MAT[i][j] < 0);
-            GRAPH_MAT[i][j] = GRAPH_MAT[i][j];
+            
+            GRAPH_MAT[j][i] = GRAPH_MAT[i][j];
         }
     }
 }
 
-void saisirConstraintsForNodes()
+void setConstraintsForNodes()
 {
 
     //delete all previous values of nodes-constraints
@@ -272,7 +272,7 @@ void saisirConstraintsForNodes()
     vertexAndMat();
 
     if (numberOfEdgesDamaged != 0)
-        afficherContraintsForEdges();
+        displayConstraintsForEdges();
 
     for (int i = 0; i < numberOfNodesDamaged; i++)
     {
@@ -285,7 +285,7 @@ void saisirConstraintsForNodes()
     }
 }
 
-void afficherContraintsForNodes()
+void displayConstraintsForNodes()
 {
     printf("\nLes renpoints non-fonctionnel :\n ");
 
@@ -298,7 +298,7 @@ void afficherContraintsForNodes()
     printf("(%c)", vertex[ii]);
 }
 
-void saisirConstraintForEdges()
+void setConstraintsForEdges()
 {
 
     //delete all previous values of edges-constraints
@@ -324,7 +324,7 @@ void saisirConstraintForEdges()
     vertexAndMat();
 
     if (numberOfNodesDamaged != 0)
-        afficherContraintsForNodes();
+        displayConstraintsForNodes();
     int c1, c2;
 
     for (int i = 0; i < numberOfEdgesDamaged; i++)
@@ -358,7 +358,7 @@ void saisirConstraintForEdges()
     }
 }
 
-void afficherContraintsForEdges()
+void displayConstraintsForEdges()
 {
 
     printf("\nLes routes non-fonctionnel :\n ");
@@ -502,46 +502,51 @@ void dijkstra(int G[MAX][MAX], int n, int u, int v)
     free(p);
 }
 
-void displayMat(){
-	 for (int i = 0; i < numberOfNodes; i++)
+void displayMat()
+{
+    for (int i = 0; i < numberOfNodes; i++)
+    {
+
+        for (int j = 0; j < numberOfNodes; j++)
         {
 
-            for (int j = 0; j < numberOfNodes; j++)
-            {
-				
-				if(GRAPH_MAT[i][j]==0)
-				printf(" - ");
-				else	
+            if (GRAPH_MAT[i][j] == 0)
+                printf(" - ");
+            else
                 printf(" %3d ", GRAPH_MAT[i][j]);
-			}
-            printf("\n");
         }
+        printf("\n");
+    }
 }
 
 void preTraitement()
 {
     //------------------applay changes to the graph
 
-        printf("\n\n________________________BEFORE_____________________\nn");
-        displayMat();
-            
-	        for (int i = 0; i < numberOfNodesDamaged; i++)
-	        {
-	            int node_index = damagedNodes[i];
-	        	printf(" %d ",node_index);
-			    for(int j=0;j<numberOfNodes;j++)
-	            GRAPH_MAT[node_index][j]=0;
-	        }
-		
-		 	for (int i = 0; i < numberOfEdgesDamaged; i++)
-	        {
-	            int from = damagedEdges[i][0];
-	            int to = damagedEdges[i][1];
-	            GRAPH_MAT[from][to]=GRAPH_MAT[to][from]=-1;
-	        }
-        
-        printf("\n\n________________________AFTER_____________________\n\n");
-        displayMat();
-       
+    // printf("\n\n________________________BEFORE_____________________\nn");
+    // displayMat();
+
+    for (int i = 0; i < numberOfNodesDamaged; i++)
+    {
+        int node_index = damagedNodes[i];
+        printf(" %d ", node_index);
+        for (int j = 0; j < numberOfNodes; j++)
+            GRAPH_MAT[node_index][j] = 0;
     }
 
+    for (int i = 0; i < numberOfEdgesDamaged; i++)
+    {
+        int from = damagedEdges[i][0];
+        int to = damagedEdges[i][1];
+        GRAPH_MAT[from][to] = GRAPH_MAT[to][from] = -1;
+    }
+
+    // printf("\n\n________________________AFTER_____________________\n\n");
+    // displayMat();
+    int u,v;
+    printf("\nEnter the starting vertex:");
+    scanf("%d", &u);
+    printf("\nEnter the destination vertex:");
+    scanf("%d", &v);
+    dijkstra(GRAPH_MAT, numberOfNodes, u, v);
+}
