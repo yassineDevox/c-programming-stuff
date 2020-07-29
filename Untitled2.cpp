@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <clocale>
 #define INFINITY 9999
 #define MAX 10
 
@@ -12,7 +11,7 @@ int *durrationsForHeuresDepoints;
 int **damagedEdges;
 int numberOfNodesDamaged = 0;
 int numberOfEdgesDamaged = 0;
-int numberOfEdgesNotNull = 0;
+int numberOfEdgesNonExistant = 0;
 
 char vertex[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
 
@@ -46,7 +45,6 @@ void preTraitement();
 
 int main()
 {
-//    setlocale(LC_ALL, "HUN");
 
 menu:
     system("cls");
@@ -59,23 +57,18 @@ menu:
     case 0:
     {
         initialValues();
-		// displayMatrixOfRoutes();
         goto continuer;
     }
     break;
     case 1:
     {
         setGraphOfRoutes();
-        displayMatrixOfRoutes();
-
         goto continuer;
     }
     break;
     case 2:
     {
         setConstraintsForNodes();
-        //displayConstraintsForNodes();
-
         goto continuer;
     }
     break;
@@ -181,7 +174,7 @@ int menu()
         printf(" \n4 : Remplir les durrees d'attentes en cas d'heure de pointe");
         printf(" \n5 : Afficher la matrice des boulevards ");
         printf(" \n6 : Afficher les ronds-points non fonctionnels");
-        printf(" \n7 : Afficher les boulevards non-fonctionnel");
+        printf(" \n7 : Afficher les boulevards bloques");
         printf(" \n8 : Afficher les durees d'heures de pointes");
         printf(" \n9 : Afficher le chemin le plus court");
         printf(" \n10 : Quitter le programme\n\t\tVotre choix : ");
@@ -215,7 +208,7 @@ void displayMatrixOfRoutes()
             if (GRAPH_MAT[i][j] != 0)
             {
                 printf("\t+ ( %c )<--[ %3d ]--> ( %c )\n", vertex[i], GRAPH_MAT[i][j], vertex[j]);
-                numberOfEdgesNotNull++;
+                numberOfEdgesNonExistant++;
             }
         }
         printf("\t\t-------------\n\n");
@@ -233,7 +226,7 @@ void setGraphOfRoutes()
     } while (numberOfNodes <= 0);
 
     //full the matrix by the values of edges for each node
-    for (int i = 0; i < numberOfNodes-1; i++)
+    for (int i = 0; i < numberOfNodes - 1; i++)
     {
         for (int j = i + 1; j < numberOfNodes; j++)
         {
@@ -243,7 +236,7 @@ void setGraphOfRoutes()
                 scanf("%d", &GRAPH_MAT[i][j]);
 
             } while (GRAPH_MAT[i][j] < 0);
-            
+
             GRAPH_MAT[j][i] = GRAPH_MAT[i][j];
         }
     }
@@ -268,7 +261,7 @@ void setConstraintsForNodes()
 
     damagedNodes = (int *)malloc(sizeof(int) * numberOfNodesDamaged);
 
-    printf("\n-------------- Remarques :\n");
+    printf("\n-------------- Rappel :\n");
     vertexAndMat();
 
     if (numberOfEdgesDamaged != 0)
@@ -287,7 +280,7 @@ void setConstraintsForNodes()
 
 void displayConstraintsForNodes()
 {
-    printf("\nLes renpoints non-fonctionnel :\n ");
+    printf("\nLes ronds-points bloques :\n ");
 
     for (int i = 0; i < numberOfNodesDamaged - 1; i++)
     {
@@ -302,29 +295,34 @@ void setConstraintsForEdges()
 {
 
     //delete all previous values of edges-constraints
-    numberOfEdgesDamaged = 0;
-    free(damagedNodes);
+    if (numberOfEdgesDamaged != 0)
+    {
+        numberOfEdgesDamaged = 0;
+        free(damagedNodes);
+    }
 
     //enter the number of nodes non fonctionnel
     do
     {
-        printf("\nHow much Edges are damaged ? ( < %d) : ", numberOfEdgesNotNull + 1);
+        printf("\nEntrer le nombre de boulevards bloques  ( < %d) : ", numberOfEdgesNonExistant + 1);
         scanf("%d", &numberOfEdgesDamaged);
 
-    } while (numberOfEdgesDamaged > numberOfEdgesNotNull);
+    } while (numberOfEdgesDamaged > numberOfEdgesNonExistant);
 
-    // create a dynamic array to store the indexs of damaged nodes
+    // create a dynamic array to store the indexes of damaged nodes
 
     damagedEdges = (int **)malloc(numberOfEdgesDamaged * sizeof(int *));
 
     for (int i = 0; i < numberOfEdgesDamaged; i++)
         damagedEdges[i] = (int *)malloc(2 * sizeof(int));
 
-    printf("\n-------------- Remarques :\n");
+    printf("\n-------------- Rappel :\n");
     vertexAndMat();
 
     if (numberOfNodesDamaged != 0)
         displayConstraintsForNodes();
+
+
     int c1, c2;
 
     for (int i = 0; i < numberOfEdgesDamaged; i++)
@@ -344,11 +342,11 @@ void setConstraintsForEdges()
 
             if (c1)
             {
-                printf("\nInvalid offsets try again ");
+                printf("\nValeurs non correspondantes");
             }
             if (c2)
             {
-                printf("\nNo conection between nodes");
+                printf("\nPas de liaison entre les deux ronds-points");
             }
         } while (c1 || c2);
 
@@ -361,7 +359,7 @@ void setConstraintsForEdges()
 void displayConstraintsForEdges()
 {
 
-    printf("\nLes routes non-fonctionnel :\n ");
+    printf("\nLes boulevards bloques :\n ");
 
     for (int i = 0; i < numberOfEdgesDamaged; i++)
     {
@@ -373,7 +371,7 @@ void displayConstraintsForEdges()
 
 void setAddedDurationInCaseOfPeakH()
 {
-    durrationsForHeuresDepoints = (int *)malloc(sizeof(int) * numberOfEdgesNotNull);
+    durrationsForHeuresDepoints = (int *)malloc(sizeof(int) * numberOfEdgesNonExistant);
 
     printf("\nSaisir les durrés a ajouter dans le cas d'heure de points :\n");
     for (int i = 0, k = 0; i < numberOfNodes - 2; i++)
@@ -543,7 +541,7 @@ void preTraitement()
 
     // printf("\n\n________________________AFTER_____________________\n\n");
     // displayMat();
-    int u,v;
+    int u, v;
     printf("\nEnter the starting vertex:");
     scanf("%d", &u);
     printf("\nEnter the destination vertex:");
