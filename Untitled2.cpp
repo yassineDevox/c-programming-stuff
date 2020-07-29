@@ -7,11 +7,11 @@
 int GRAPH_MAT[MAX][MAX];
 int numberOfNodes;
 int *damagedNodes;
-int *durrationsForHeuresDepoints;
+int *addedDurationsInCaseOfPeakH;
 int **damagedEdges;
 int numberOfNodesDamaged = 0;
 int numberOfEdgesDamaged = 0;
-int numberOfEdgesNonExistant = 0;
+int numberOfEdgesExistant = 0;
 
 char vertex[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
 
@@ -75,7 +75,6 @@ menu:
     case 3:
     {
         setConstraintsForEdges();
-        displayConstraintsForEdges();
         goto continuer;
     }
     break;
@@ -208,7 +207,7 @@ void displayMatrixOfRoutes()
             if (GRAPH_MAT[i][j] != 0)
             {
                 printf("\t+ ( %c )<--[ %3d ]--> ( %c )\n", vertex[i], GRAPH_MAT[i][j], vertex[j]);
-                numberOfEdgesNonExistant++;
+                numberOfEdgesExistant++;
             }
         }
         printf("\t\t-------------\n\n");
@@ -304,10 +303,10 @@ void setConstraintsForEdges()
     //enter the number of nodes non fonctionnel
     do
     {
-        printf("\nEntrer le nombre de boulevards bloques  ( < %d) : ", numberOfEdgesNonExistant + 1);
+        printf("\nEntrer le nombre de boulevards bloques  ( < %d) : ", numberOfEdgesExistant + 1);
         scanf("%d", &numberOfEdgesDamaged);
 
-    } while (numberOfEdgesDamaged > numberOfEdgesNonExistant);
+    } while (numberOfEdgesDamaged > numberOfEdgesExistant);
 
     // create a dynamic array to store the indexes of damaged nodes
 
@@ -371,18 +370,18 @@ void displayConstraintsForEdges()
 
 void setAddedDurationInCaseOfPeakH()
 {
-    durrationsForHeuresDepoints = (int *)malloc(sizeof(int) * numberOfEdgesNonExistant);
+    addedDurationsInCaseOfPeakH = (int *)malloc(sizeof(int) * numberOfEdgesExistant);
 
-    printf("\nSaisir les durrés a ajouter dans le cas d'heure de points :\n");
-    for (int i = 0, k = 0; i < numberOfNodes - 2; i++)
+    printf("\nSaisir les durees a ajouter dans le cas d'heure de pointes (En minutes):\n");
+    for (int i = 0, k = 0; i < numberOfNodes - 1; i++)
     {
         for (int j = i + 1; j < numberOfNodes; j++)
         {
             if (GRAPH_MAT[i][j] != 0)
             {
 
-                printf("\n Node( %c ) <--> node( %c ) : ", vertex[i], vertex[j]);
-                scanf("%d", &durrationsForHeuresDepoints[k]);
+                printf("\n rond-point( %c ) <--> rond-point( %c ) : ", vertex[i], vertex[j]);
+                scanf("%d", &addedDurationsInCaseOfPeakH[k]);
                 k++;
             }
         }
@@ -392,15 +391,15 @@ void setAddedDurationInCaseOfPeakH()
 void displayAddedDurationInCaseOfPeakH()
 {
 
-    printf("\nLes durres d'heures de points : \n");
+    printf("\nLes durees d'heures de pointes : \n");
 
-    for (int i = 0, k = 0; i < numberOfNodes - 2; i++)
+    for (int i = 0, k = 0; i < numberOfNodes - 1; i++)
     {
         for (int j = i + 1; j < numberOfNodes; j++)
         {
             if (GRAPH_MAT[i][j] != 0)
             {
-                printf("\n Node( %c ) <--> node( %c ) : %d mins", vertex[i], vertex[j], durrationsForHeuresDepoints[k]);
+                printf("\n rond-point( %c ) <--> rond-point( %c ) : %d min", vertex[i], vertex[j], addedDurationsInCaseOfPeakH[k]);
                 k++;
             }
         }
