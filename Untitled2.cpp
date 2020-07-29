@@ -81,7 +81,6 @@ menu:
     case 4:
     {
         setAddedDurationInCaseOfPeakH();
-        displayAddedDurationInCaseOfPeakH();
         goto continuer;
     }
     break;
@@ -164,15 +163,15 @@ int menu()
     int choix;
     do
     {
-        printf(" \nTrouver le petit chemin possible pour votre route \1 !!");
+        printf(" \nTrouver le plus court chemin possible pour votre destination \1 !!");
         printf(" \nMenu du Programme : !!");
-        printf(" \n0 : Utiliser les valeurs initial ? ");
+        printf(" \n0 : Utiliser les valeurs initiales ? ");
         printf(" \n1 : Remplire la matrice des boulevards");
-        printf(" \n2 : Indiquer des ronds-points non fonctionnels");
-        printf(" \n3 : Indiquer des boulevards non fonctionnels");
-        printf(" \n4 : Remplir les durrees d'attentes en cas d'heure de pointe");
+        printf(" \n2 : Indiquer des ronds-points bloques");
+        printf(" \n3 : Indiquer des boulevards bloques");
+        printf(" \n4 : Remplir les durees d'attentes en cas d'heure de pointe");
         printf(" \n5 : Afficher la matrice des boulevards ");
-        printf(" \n6 : Afficher les ronds-points non fonctionnels");
+        printf(" \n6 : Afficher les ronds-points bloques");
         printf(" \n7 : Afficher les boulevards bloques");
         printf(" \n8 : Afficher les durees d'heures de pointes");
         printf(" \n9 : Afficher le chemin le plus court");
@@ -270,7 +269,7 @@ void setConstraintsForNodes()
     {
         do
         {
-            printf(" \nEnter node index (between 0 & %d ) : ", numberOfNodes - 1);
+            printf(" \nEntrer l'indice du noeud (entre 0 et %d ) : ", numberOfNodes - 1);
             scanf("%d", &damagedNodes[i]);
 
         } while (damagedNodes[i] < 0 || (numberOfNodes - 1) < damagedNodes[i]);
@@ -303,7 +302,7 @@ void setConstraintsForEdges()
     //enter the number of nodes non fonctionnel
     do
     {
-        printf("\nEntrer le nombre de boulevards bloques  ( < %d) : ", numberOfEdgesExistant + 1);
+        printf("\nEntrer le nombre de boulevards bloques  ( < %d) : ", numberOfEdgesExistant);
         scanf("%d", &numberOfEdgesDamaged);
 
     } while (numberOfEdgesDamaged > numberOfEdgesExistant);
@@ -320,7 +319,6 @@ void setConstraintsForEdges()
 
     if (numberOfNodesDamaged != 0)
         displayConstraintsForNodes();
-
 
     int c1, c2;
 
@@ -520,13 +518,12 @@ void preTraitement()
 {
     //------------------applay changes to the graph
 
-    // printf("\n\n________________________BEFORE_____________________\nn");
-    // displayMat();
+    printf("\n\n________________________BEFORE_____________________\n\n");
+    displayMat();
 
     for (int i = 0; i < numberOfNodesDamaged; i++)
     {
         int node_index = damagedNodes[i];
-        printf(" %d ", node_index);
         for (int j = 0; j < numberOfNodes; j++)
             GRAPH_MAT[node_index][j] = 0;
     }
@@ -535,15 +532,34 @@ void preTraitement()
     {
         int from = damagedEdges[i][0];
         int to = damagedEdges[i][1];
-        GRAPH_MAT[from][to] = GRAPH_MAT[to][from] = -1;
+        GRAPH_MAT[from][to] = GRAPH_MAT[to][from] = 0;
     }
 
-    // printf("\n\n________________________AFTER_____________________\n\n");
-    // displayMat();
+    // ask user if it is a peak hour or not
+    int c;
+    printf("Est c'est une heure de pointe ?\nOui : 1\nNon : 0\n\t\t Votre Choix : ");
+    scanf("%d", &c);
+    if (c == 1)
+    {
+        for (int i = 0, k = 0; i < numberOfNodes - 1; i++)
+        {
+            for (int j = i + 1; j < numberOfNodes; j++)
+            {
+                if (GRAPH_MAT[i][j] != 0)
+                {
+                    GRAPH_MAT[i][j] += addedDurationsInCaseOfPeakH[k];
+                    k++;
+                }
+            }
+        }
+    }
+
+    printf("\n\n________________________AFTER_____________________\n\n");
+    displayMat();
     int u, v;
-    printf("\nEnter the starting vertex:");
+    printf("\n Entrer le point de depart : ");
     scanf("%d", &u);
-    printf("\nEnter the destination vertex:");
+    printf("\nEntrer le point d'arrivee : ");
     scanf("%d", &v);
     dijkstra(GRAPH_MAT, numberOfNodes, u, v);
 }
