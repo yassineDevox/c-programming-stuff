@@ -38,9 +38,9 @@ void setConstraintsForEdges();
 
 void displayConstraintsForEdges();
 
-void saisirDurrationsForHeureDePointConstraints();
+void setAddedDurationInCaseOfPeakH();
 
-void afficherLesDurresHeurePoints();
+void displayAddedDurationInCaseOfPeakH();
 
 void preTraitement();
 
@@ -88,8 +88,8 @@ menu:
     break;
     case 4:
     {
-        saisirDurrationsForHeureDePointConstraints();
-        afficherLesDurresHeurePoints();
+        setAddedDurationInCaseOfPeakH();
+        displayAddedDurationInCaseOfPeakH();
         goto continuer;
     }
     break;
@@ -113,7 +113,7 @@ menu:
     break;
     case 8:
     {
-        afficherLesDurresHeurePoints();
+        displayAddedDurationInCaseOfPeakH();
         goto continuer;
     }
     break;
@@ -371,7 +371,7 @@ void displayConstraintsForEdges()
     }
 }
 
-void saisirDurrationsForHeureDePointConstraints()
+void setAddedDurationInCaseOfPeakH()
 {
     durrationsForHeuresDepoints = (int *)malloc(sizeof(int) * numberOfEdgesNotNull);
 
@@ -391,7 +391,7 @@ void saisirDurrationsForHeureDePointConstraints()
     }
 }
 
-void afficherLesDurresHeurePoints()
+void displayAddedDurationInCaseOfPeakH()
 {
 
     printf("\nLes durres d'heures de points : \n");
