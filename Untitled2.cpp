@@ -190,9 +190,14 @@ void initialValues()
     fp = fopen(name, "r");
     fscanf(fp, "%d", &numberOfNodes);
     for (i = 0; i < numberOfNodes; i++)
-        for (j = 0; j < numberOfNodes; j++)
+        for (j = 0; j < numberOfNodes; j++){
             fscanf(fp, "%d", &GRAPH_MAT[i][j]);
-
+            if(GRAPH_MAT[i][j]!=0)
+            {
+                numberOfEdgesExistant++;
+            }
+        }
+        numberOfEdgesExistant/=2;    
     fclose(fp);
 }
 
@@ -206,7 +211,7 @@ void displayMatrixOfRoutes()
             if (GRAPH_MAT[i][j] != 0)
             {
                 printf("\t+ ( %c )<--[ %3d ]--> ( %c )\n", vertex[i], GRAPH_MAT[i][j], vertex[j]);
-                numberOfEdgesExistant++;
+               
             }
         }
         printf("\t\t-------------\n\n");
@@ -236,6 +241,7 @@ void setGraphOfRoutes()
             } while (GRAPH_MAT[i][j] < 0);
 
             GRAPH_MAT[j][i] = GRAPH_MAT[i][j];
+            numberOfEdgesExistant++;
         }
     }
 }
